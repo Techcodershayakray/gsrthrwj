@@ -7,7 +7,7 @@ Jinja2
 numpy
 opencv-python
 wget
-Wikipedia-API
+wikipedia-api
 
 
 
