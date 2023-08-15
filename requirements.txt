@@ -2,8 +2,8 @@
 
 
 bardapi
-Flask
-Jinja2
+flask
+
 numpy
 opencv-python
 wget
