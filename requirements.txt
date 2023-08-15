@@ -8,9 +8,7 @@ browser-cookie3==0.19.1
 cachetools==5.3.1
 certifi==2023.7.22
 charset-normalizer==3.2.0
-click==8.1.6
-colorama==0.4.6
-comm==0.1.4
+
 decorator==5.1.1
 deep-translator==1.11.4
 distlib==0.3.7
