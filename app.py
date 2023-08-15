@@ -1,24 +1,16 @@
-from bardapi import Bard
+from ast import List
 from flask import Flask, render_template, request, redirect, url_for
 import os
 import cv2
 import numpy as np
 import wikipediaapi
-from bs4 import BeautifulSoup
-import requests
-import bardapi
+from bardapi import Bard
 import wget
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-def remove_duplicates(input_array):
-    return list(set(input_array))
-
-
 # Download the YOLOv3 weights file from the provided URL
 yolov3_weights_url = "https://github.com/Techcodershayakray/app_flask_op/blob/main/yolov3.weights"
 yolov3_weights_path = "yolov3.weights"
@@ -30,6 +22,12 @@ if not os.path.exists(yolov3_weights_path):
     print("\nDownload complete!")
 
 net = cv2.dnn.readNet(yolov3_weights_path, 'yolov3.cfg')
+
+
+def test_again():
+    return redirect(url_for('index'))
+
+
 filename = ''
 detected_objects = []
 classes = []
@@ -38,19 +36,17 @@ class_name = []
 output = []
 array = []
 name = []
-output = []
-array = []
 topics = []
 empty_set = set()
-
 with open('coco.names', 'r') as f:
     classes = f.read().strip().split('\n')
 
+layer_names = net.getLayerNames()
+output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
 
-def get_output_layers(net):
-    layer_names = net.getLayerNames()
-    output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-    return output_layers
+
+def remove_duplicates(input_array):
+    return list(set(input_array))
 
 
 # Wikipedia API setup
@@ -94,7 +90,7 @@ def upload_file():
 
         blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
         net.setInput(blob)
-        outs = net.forward(get_output_layers(net))
+        outs = net.forward(output_layers)
 
         class_ids = []
         confidences = []
@@ -105,7 +101,6 @@ def upload_file():
                 scores = detection[5:]
                 class_id = np.argmax(scores)
                 confidence = scores[class_id]
-
                 if confidence > 0.5:
                     # Object detected
                     center_x = int(detection[0] * width)
@@ -125,20 +120,30 @@ def upload_file():
 
         for i in range(len(boxes)):
             if i in indexes:
+                x, y, w, h = boxes[i]
                 label = str(classes[class_ids[i]])
+                classname1 = classes[class_ids[i]]
+                wiki_page = wiki_wiki.page(classname1)
                 name.append(label)
-                class_id = class_ids[i]
-                class_name = classes[class_id]
-                wiki_page = wiki_wiki.page(class_name)
+                if classname1 not in class_name:
+                    class_name.append(classname1)
+                    wiki_page = wiki_wiki.page(classname1)
+                confidence = confidences[i]
 
                 detected_object = {
-                    'class': class_name,
+                    'class': classname1,
                     'confidence': confidences[i],
                     'box': boxes[i],
                     'summary': wiki_page.summary if wiki_page.exists() else "No Wikipedia data available"
                 }
                 detected_objects.append(detected_object)
-            filename = filename.split('_')[-1]
+
+                color = (0, 255, 0)
+                cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
+                cv2.putText(img, f'{label} {confidence:.2f}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+        result_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'result_' + file.filename)
+        cv2.imwrite(result_image_path, img)
 
         return redirect(url_for('uploaded_file', filename='result_' + file.filename))
 
