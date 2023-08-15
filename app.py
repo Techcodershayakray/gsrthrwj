@@ -12,7 +12,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Download the YOLOv3 weights file from the provided URL
-yolov3_weights_url = "https://github.com/Techcodershayakray/app_flask_op/blob/main/yolov3.weights"
+yolov3_weights_url = "https://pjreddie.com/media/files/yolov3.weights"
 yolov3_weights_path = "yolov3.weights"
 
 # Download the weights file if it doesn't exist
