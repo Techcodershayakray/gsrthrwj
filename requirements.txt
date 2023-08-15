@@ -1,11 +1,13 @@
 
 
 
-
-flask
-
-
-
+bardapi
+Flask
+Jinja2
+numpy
+opencv-python
+wget
+wikipedia-api
 
 
 
