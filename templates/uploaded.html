@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uploaded Image</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+   <h1>Uploaded image</h1>
+    <img src="{{ url_for('static',filename='uploads/' + filename) }}" alt="Uploaded Image">
+    <h1>Object Detection Result</h1>
+    <img src="{{ url_for('static', filename='uploads/result_' + filename) }}" alt="Detection Result">
+    <h2>Information gathered</h2>
+    
+  
+    <ul>
+        {% for obj in detected_objects %}
+            <li>
+                Class: {{ obj.class }}<br>
+                Confidence: {{ obj.confidence }}<br>
+                Box: {{ obj.box }}<br>
+                Wikipedia Summary: {{ obj.summary }}
+            </li>
+        {% endfor %}
+    </ul>
+     <h2>Google-bard generated text </h2>
+    <ul>
+        {% for i in range(name|length) %}
+        <li><strong>{{ array[i] }}</strong></li>
+        <p>{{ name[i] }}</p>
+        {% endfor%}</ul>
+<a href="{{ url_for('test_again') }}">Test Again</a>
+
+
+</body>
+</html>
