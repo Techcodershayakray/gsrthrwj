@@ -1,13 +1,10 @@
 
 
 
-bardapi
+
 flask
 
-numpy
-opencv-python
-wget
-wikipedia-api
+
 
 
 
