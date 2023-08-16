@@ -3,7 +3,6 @@
 
 bardapi
 Flask
-Jinja2
 numpy
 opencv-python
 wget
