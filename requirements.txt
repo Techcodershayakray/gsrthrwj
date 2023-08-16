@@ -1,3 +1,8 @@
+bardapi
+numpy
+opencv-python
+wget
+wikipedia-api
 
 
 
